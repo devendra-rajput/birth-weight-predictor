@@ -39,7 +39,11 @@
             color: #555;
         }
 
-        input[type="number"] {
+        label span{
+            font-size: 12px;
+        }
+
+        input[type="number"], select {
             width: 100%;
             padding: 10px;
             margin-top: 5px;
@@ -73,38 +77,56 @@
 
 </head>
 <body>
-    <h1>Birth Weight Predictor</h1>
+    <h1>Baby birth weight predictor</h1>
 
-    <form method="post" action="/prediction">
-        <label>Gestation</label>
+    <form method="post" action="/">
+        {{ form.hidden_tag() }}
+        <label>Gestation <span>(Days)</span></label>
         <input type="number" name="gestation" value="{{form_data["gestation"]}}"/>
-        <br>
+        {% for error in form.gestation.errors %}
+            <span style="color:red;">{{ error }}</span><br>
+        {% endfor %}
 
         <label>Parity</label>
         <input type="number" name="parity" value="{{form_data["parity"]}}"/>
-        <br>
+        {% for error in form.parity.errors %}
+            <span style="color:red;">{{ error }}</span><br>
+        {% endfor %}
 
         <label>Age</label>
         <input type="number" name="age" value="{{form_data["age"]}}"/>
-        <br>
+        {% for error in form.age.errors %}
+            <span style="color:red;">{{ error }}</span><br>
+        {% endfor %}
 
-        <label>Weight</label>
-        <input type="number" name="weight" value="{{form_data["weight"]}}"/>
-        <br>
+        <label>Weight <span>(kg)</span></label>
+        <input type="number" name="weight" step="any" value="{{form_data["weight"]}}"/>
+        {% for error in form.weight.errors %}
+            <span style="color:red;">{{ error }}</span><br>
+        {% endfor %}
 
-        <label>Height</label>
-        <input type="number" name="height" value="{{form_data["gestation"]}}"/>
-        <br>
+        <label>Height <span>(foot)</span></label>
+        <input type="number" name="height" step="any" value="{{form_data["height"]}}"/>
+        {% for error in form.height.errors %}
+            <span style="color:red;">{{ error }}</span><br>
+        {% endfor %}
 
         <label>Smoke</label>
-        <input type="number" name="smoke" value="{{form_data["gestation"]}}"/>
-        <br>
+        <!-- <input type="number" name="smoke" value="{{form_data["smoke"]}}"/> -->
+        <select name="smoke">
+            <option value=""></option>
+            <option value="1" {% if form_data["smoke"] == "1" %} selected {% endif %}>Yes</option>
+            <option value="0" {% if form_data["smoke"] == "0" %} selected {% endif %}>No</option>
+        </select>
+        {% for error in form.smoke.errors %}
+            <span style="color:red;">{{ error }}</span><br>
+        {% endfor %}
 
         <button type="submit">Get Prediction</button>
     </form>
 
     {% if response: %}
-        <h3>Prediction: {{response["prediction"]}}</h3>
+        <h3>Prediction: {{response["prediction"]}} Kg</h3>
     {% endif %}
 </body>
 </html>

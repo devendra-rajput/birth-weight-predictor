@@ -6,7 +6,7 @@ from sklearn.metrics import r2_score, mean_squared_error
 import pickle
 
 # Load the dataset
-babies_df = pd.read_csv("dataset/babies.csv")
+babies_df = pd.read_csv("../dataset/babies.csv")
 
 # Drop the 'case' column as it's likely an identifier and not useful for prediction
 babies_df.drop(columns=["case"], inplace=True)
@@ -16,6 +16,15 @@ babies_df.drop(columns=["case"], inplace=True)
 # print(babies_df.isnull().sum())
 babies_df.dropna(inplace=True)
 # print(babies_df.isnull().sum())
+
+# # 1 Kg = 35.274
+# babies_df["bwt"] = round(babies_df["bwt"] / 35.274, 2) # Convert ounce into KG
+
+# # 1 Foot = 12
+# babies_df["height"] = round(babies_df["height"] / 12, 2) # Convert ounce into foot
+
+# # 1 Kg = 2.205
+# babies_df["weight"] = round(babies_df["weight"] / 2.205, 2) # Convert pound into KG
 
 # Separate the target variable (birth weight) and the features
 y = babies_df["bwt"]                    # Target variable
@@ -51,5 +60,5 @@ rid_mse = mean_squared_error(y_test, rid_predict)
 
 # Save the trained Linear Regression model using pickle
 # (Only the Linear Regression model is saved here)
-with open("models/model.pkl", "wb") as pklFile:
+with open("model.pkl", "wb") as pklFile:
     pickle.dump(lr, pklFile)
